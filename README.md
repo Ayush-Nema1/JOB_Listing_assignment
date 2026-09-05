@@ -10,10 +10,12 @@ A practical paginated job-listing feature built for the full-stack assessment.
 
 ## Run the backend
 
+Open a terminal in the project folder and run:
+
 ```bash
 cd backend
 py -m pip install -r requirements.txt
-py -m uvicorn main:app --reload --port 8000
+py -m uvicorn main:app --reload --port 8000vicorn main:app --reload --port 8000
 ```
 
 API docs:
