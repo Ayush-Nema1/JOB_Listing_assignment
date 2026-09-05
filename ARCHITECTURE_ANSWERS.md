@@ -2,18 +2,18 @@
 
 ## 1. Where should the paid third-party AI API key live?
 
-The key should never be placed in frontend code. Browser code can be inspected by users, so a frontend key can be copied and abused, potentially generating paid requests.
+I would keep the API key on the backend, not in the frontend. Anything shipped to the browser can be viewed by users, so exposing the key would allow someone to copy and misuse it.
 
-The key should stay on the backend as a server-side environment variable/secret. The backend calls the third-party AI service without exposing the secret to the browser.
+The backend can store the key in an environment variable and use it when making requests to the AI service.
+
 
 ## 2. How do we stop anyone from triggering paid backend calls?
+The AI endpoint should not be publicly usable. I would first add authentication and check that the request is coming from a logged-in user.
 
-Add authentication and authorization before the paid operation. For example, users sign in and the backend validates their session or JWT before allowing the AI request.
-
-I would also add rate limiting and request quotas. Authentication controls who can call the endpoint, while rate limiting controls how frequently they can call it.
+Since the API is paid, I would also add rate limiting or a per-user quota so one user cannot keep sending requests and run up the API bill.
 
 ## 3. Why would Vercel → Render fail with a browser cross-origin error?
 
-The most likely problem is an incorrect CORS configuration on the backend. The Render backend must allow the exact deployed Vercel frontend origin.
+I would first check the backend's CORS settings. Since the frontend and backend are on different origins, the FastAPI backend needs to explicitly allow the Vercel frontend URL.
 
-I would check the FastAPI `CORSMiddleware` configuration first and verify the allowed origin matches the deployed frontend URL exactly.
+So I would check the CORSMiddleware configuration on the Render backend and make sure the allowed origin matches the deployed frontend URL.
